@@ -5,31 +5,40 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    public static int current_version = 1;
-    public DataBaseHelper(Context context)
-    {
-        super(context,"address.db",null, current_version);
+    public static int current_version = DataBaseSchema.DATABASE_VERSION;
+
+    public int getCurrent_version() {
+        return current_version;
+    }
+
+    public DataBaseHelper(Context context) {
+        super(context,DataBaseSchema.DATABASE_NAME, null, current_version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String query = "CREATE TABLE contacts ( contact_id INTEGER PRIMARY KEY, first_name TEXT, " +
-                "last_name TEXT, email_id TEXT, phone_number TEXT, home_address TEXT)";
+        String query = "CREATE TABLE " +
+                        DataBaseSchema.TABLE_CONTACTS + "(" +
+                        DataBaseSchema.CONTACT_ID   + " INTEGER PRIMARY KEY," +
+                        DataBaseSchema.FIRST_NAME   + " TEXT," +
+                        DataBaseSchema.LAST_NAME    + " TEXT," +
+                        DataBaseSchema.EMAIL_ID     + " TEXT," +
+                        DataBaseSchema.PHONE_NUMBER + " TEXT," +
+                        DataBaseSchema.HOME_ADDRESS + " TEXT" +
+                        ")";
 
         database.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        String query = "DROP TABLE IF EXISTS contacts";
+        String query = "DROP TABLE IF EXISTS "+ DataBaseSchema.TABLE_CONTACTS;
         database.execSQL(query);
         onCreate(database);
     }
@@ -40,43 +49,37 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("first_name",   queryValues.get("first_name"));
-        values.put("last_name",    queryValues.get("last_name"));
-        values.put("email_id",     queryValues.get("email_id"));
-        values.put("phone_number", queryValues.get("phone_number"));
-        values.put("home_address", queryValues.get("home_address"));
+        values.put(DataBaseSchema.FIRST_NAME,   queryValues.get(DataBaseSchema.FIRST_NAME));
+        values.put(DataBaseSchema.LAST_NAME,    queryValues.get(DataBaseSchema.LAST_NAME));
+        values.put(DataBaseSchema.EMAIL_ID,     queryValues.get(DataBaseSchema.EMAIL_ID));
+        values.put(DataBaseSchema.PHONE_NUMBER, queryValues.get(DataBaseSchema.PHONE_NUMBER));
+        values.put(DataBaseSchema.HOME_ADDRESS, queryValues.get(DataBaseSchema.HOME_ADDRESS));
 
-        database.insert("contacts", null, values);
-
+        database.insert(DataBaseSchema.TABLE_CONTACTS, null, values);
         database.close();
-
     }
 
 
     public ArrayList<HashMap<String, String>> getAllContactInfo(){
 
         ArrayList<HashMap<String, String>> allList = new ArrayList<HashMap<String, String>>();
-
         SQLiteDatabase database = this.getReadableDatabase();
-
         //String selectQuery = "SELECT * FROM contacts WHERE contact_id='" + id + "'";
-        String selectQuery = "SELECT * FROM contacts";
+        String selectQuery = "SELECT * FROM "+ DataBaseSchema.TABLE_CONTACTS;
         Cursor cursor = database.rawQuery(selectQuery, null);
-        int nentry = cursor.getCount();
 
         if(cursor.moveToFirst()){
             do{
                 HashMap<String, String> contactMap = new HashMap<String, String>();
-                contactMap.put("contact_id",   cursor.getString(0));
-                contactMap.put("first_name",   cursor.getString(1));
-                contactMap.put("last_name",    cursor.getString(2));
-                contactMap.put("email_id",     cursor.getString(3));
-                contactMap.put("phone_number", cursor.getString(4));
-                contactMap.put("home_address", cursor.getString(5));
+                contactMap.put(DataBaseSchema.CONTACT_ID,   cursor.getString(0));
+                contactMap.put(DataBaseSchema.FIRST_NAME,   cursor.getString(1));
+                contactMap.put(DataBaseSchema.LAST_NAME,    cursor.getString(2));
+                contactMap.put(DataBaseSchema.EMAIL_ID,     cursor.getString(3));
+                contactMap.put(DataBaseSchema.PHONE_NUMBER, cursor.getString(4));
+                contactMap.put(DataBaseSchema.HOME_ADDRESS, cursor.getString(5));
                 allList.add(contactMap);
             } while(cursor.moveToNext());
         }
-
         database.close();
         return allList;
     }
@@ -84,46 +87,43 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public HashMap<String, String> getContactInfo(String id){
         HashMap<String, String> contactMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-
-        String selectQuery = "SELECT * FROM contacts WHERE contact_id='" + id + "'";
+        String selectQuery = "SELECT * FROM " + DataBaseSchema.TABLE_CONTACTS +
+                             " WHERE " + DataBaseSchema.CONTACT_ID +
+                             "=" + "'" + id + "'";
         Cursor cursor = database.rawQuery(selectQuery, null);
         if(cursor.moveToFirst()){
             do{
 
-                contactMap.put("contact_id",   cursor.getString(0));
-                contactMap.put("first_name",   cursor.getString(1));
-                contactMap.put("last_name",    cursor.getString(2));
-                contactMap.put("email_id",     cursor.getString(3));
-                contactMap.put("phone_number", cursor.getString(4));
-                contactMap.put("home_address", cursor.getString(5));
+                contactMap.put(DataBaseSchema.CONTACT_ID,   cursor.getString(0));
+                contactMap.put(DataBaseSchema.FIRST_NAME,   cursor.getString(1));
+                contactMap.put(DataBaseSchema.LAST_NAME,    cursor.getString(2));
+                contactMap.put(DataBaseSchema.EMAIL_ID,     cursor.getString(3));
+                contactMap.put(DataBaseSchema.PHONE_NUMBER, cursor.getString(4));
+                contactMap.put(DataBaseSchema.HOME_ADDRESS, cursor.getString(5));
             } while(cursor.moveToNext());
         }
-
         database.close();
         return contactMap;
     }
 
 
-    public int updateTableRow(String id, HashMap<String, String> newValue){
-
+    public int updateTableRow(String id, HashMap<String, String> newValue) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put("first_name",   newValue.get("first_name"));
-        values.put("last_name",    newValue.get("last_name"));
-        values.put("email_id",     newValue.get("email_id"));
-        values.put("phone_number", newValue.get("phone_number"));
-        values.put("home_address", newValue.get("home_address"));
+        values.put(DataBaseSchema.FIRST_NAME,   newValue.get(DataBaseSchema.FIRST_NAME));
+        values.put(DataBaseSchema.LAST_NAME,    newValue.get(DataBaseSchema.LAST_NAME));
+        values.put(DataBaseSchema.EMAIL_ID,     newValue.get(DataBaseSchema.EMAIL_ID));
+        values.put(DataBaseSchema.PHONE_NUMBER, newValue.get(DataBaseSchema.PHONE_NUMBER));
+        values.put(DataBaseSchema.HOME_ADDRESS, newValue.get(DataBaseSchema.HOME_ADDRESS));
 
         int affectedRows = database.update(
-                           "contacts",
+                           DataBaseSchema.TABLE_CONTACTS,
                            values,
-                           "contact_id"+"="+id,
+                           DataBaseSchema.CONTACT_ID+"="+id,
                            null
                            );
-
         database.close();
         return affectedRows;
     }
-
 }

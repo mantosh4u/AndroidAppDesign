@@ -17,4 +17,12 @@
     <string name="update_button">UPDATE</string>
     <string name="title_activity_detailed_single_entry">DetailedSingleEntryActivity</string>
 
+    <string name="shared_customer_id">com.example.mantoshkumar.customer_id</string>
+
+    <string name="correct">Success</string>
+    <string name="incorrect">Failure</string>
+
+    <string name="result_add_button">KeyForAddButton</string>
+    <string name="result_delete_button">KeyForDeleteButton</string>
+
 </resources>

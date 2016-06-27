@@ -286,13 +286,18 @@
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
     <string name="contact_id">Id</string>
     <string name="container_widget">Container Widget</string>
+    <string name="correct">Success</string>
     <string name="delete_button">DELETE</string>
     <string name="email_id">Email Id</string>
     <string name="first_name">First Name</string>
     <string name="get_button">GET</string>
     <string name="home_address">Address</string>
+    <string name="incorrect">Failure</string>
     <string name="last_name">Last Name</string>
     <string name="phone_number">Phone Number</string>
+    <string name="result_add_button">KeyForAddButton</string>
+    <string name="result_delete_button">KeyForDeleteButton</string>
+    <string name="shared_customer_id">com.example.mantoshkumar.customer_id</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="title_activity_detailed_single_entry">DetailedSingleEntryActivity</string>
     <string name="update_button">UPDATE</string>

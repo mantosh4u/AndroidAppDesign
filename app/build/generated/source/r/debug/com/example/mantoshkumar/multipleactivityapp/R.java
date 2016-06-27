@@ -2507,16 +2507,21 @@ containing a value of this type.
         public static final int character_counter_pattern=0x7f060019;
         public static final int contact_id=0x7f06001a;
         public static final int container_widget=0x7f06001b;
-        public static final int delete_button=0x7f06001c;
-        public static final int email_id=0x7f06001d;
-        public static final int first_name=0x7f06001e;
-        public static final int get_button=0x7f06001f;
-        public static final int home_address=0x7f060020;
-        public static final int last_name=0x7f060021;
-        public static final int phone_number=0x7f060022;
+        public static final int correct=0x7f06001c;
+        public static final int delete_button=0x7f06001d;
+        public static final int email_id=0x7f06001e;
+        public static final int first_name=0x7f06001f;
+        public static final int get_button=0x7f060020;
+        public static final int home_address=0x7f060021;
+        public static final int incorrect=0x7f060022;
+        public static final int last_name=0x7f060023;
+        public static final int phone_number=0x7f060024;
+        public static final int result_add_button=0x7f060025;
+        public static final int result_delete_button=0x7f060026;
+        public static final int shared_customer_id=0x7f060027;
         public static final int status_bar_notification_info_overflow=0x7f060013;
-        public static final int title_activity_detailed_single_entry=0x7f060023;
-        public static final int update_button=0x7f060024;
+        public static final int title_activity_detailed_single_entry=0x7f060028;
+        public static final int update_button=0x7f060029;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f090088;
