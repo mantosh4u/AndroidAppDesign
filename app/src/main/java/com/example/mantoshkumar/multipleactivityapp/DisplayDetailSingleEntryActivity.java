@@ -69,11 +69,11 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         HashMap<String, String> getOneEntry = getDbTools().getContactInfo(index);
 
         // Update all widgets based on above values
-        mFirstName.setText(getOneEntry.get("first_name").toString());
-        mLastName.setText(getOneEntry.get("last_name").toString());
-        mEmailId.setText(getOneEntry.get("email_id").toString());
-        mPhoneNumber.setText(getOneEntry.get("phone_number").toString());
-        mHomeAddress.setText(getOneEntry.get("home_address").toString());
+        mFirstName.setText(getOneEntry.get(DataBaseSchema.FIRST_NAME).toString());
+        mLastName.setText(getOneEntry.get(DataBaseSchema.LAST_NAME).toString());
+        mEmailId.setText(getOneEntry.get(DataBaseSchema.EMAIL_ID).toString());
+        mPhoneNumber.setText(getOneEntry.get(DataBaseSchema.PHONE_NUMBER).toString());
+        mHomeAddress.setText(getOneEntry.get(DataBaseSchema.HOME_ADDRESS).toString());
     }
 
 }
