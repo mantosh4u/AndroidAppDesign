@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import java.util.HashMap;
 
+/** The main/start point for this particular application. **/
 public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
 
     private EditText mFirstName;
@@ -23,35 +24,23 @@ public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
     private Button  mGetButton;
     private Button  mDeleteButton;
 
-    private static String mEmptyString = "";
+    private static String sEmptyString = "";
 
-    private void commonHandleMessage(Message msg, String keyName) {
-        Bundle bundle = msg.getData();
-        String string = bundle.getString(keyName);
-        // Just display the small toast message when child/helper thread complete
-        //  with success/failure.
-        if(string.equals(getString(R.string.correct)) == true) {
-            Toast.makeText(MainActivity.this, R.string.correct, Toast.LENGTH_SHORT).show();
-        } else if(string.equals(getString(R.string.incorrect)) == true) {
-            Toast.makeText(MainActivity.this, R.string.incorrect, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    Handler mDeleteButtonThreadHandler = new Handler(){
+    private Handler mDeleteButtonThreadHandler = new Handler(){
         @Override
         public void handleMessage(Message msg){
-            commonHandleMessage(msg, getString(R.string.result_delete_button));
+            commonHandleMessage(MainActivity.this, msg, getString(R.string.result_delete_button));
         }
     };
 
-    Handler mAddButtonThreadHandler = new Handler(){
+    private Handler mAddButtonThreadHandler = new Handler(){
         @Override
         public void handleMessage(Message msg){
-            commonHandleMessage(msg, getString(R.string.result_add_button));
+            commonHandleMessage(MainActivity.this, msg, getString(R.string.result_add_button));
         }
     };
 
-    // call the insert stuff into database from(get) from various widgets
+    /** perform the insert operation in database using widgets information(getText) **/
     private void setAddButtonOnClick(View v) {
         final HashMap<String, String> insertValues = new HashMap<String, String>();
 
@@ -64,9 +53,9 @@ public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
         boolean output = validateEntryBeforeDatabaseAdd(insertValues);
 
         if(output == true) {
-            // This is Add operation on database and hence it should also be excecuted
-            // in separate thread.
-            Runnable addButtononRunnable = new Runnable() {
+            /** This is ADD operation in database and hence it should execute himself **/
+            /** in separate thread.                                                   **/
+            Runnable addButtonOnRunnable = new Runnable() {
                 @Override
                 public void run() {
                     String result;
@@ -84,16 +73,17 @@ public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
                     mAddButtonThreadHandler.sendMessage(msg);
                 }
             };
-            Thread threadAddButton = new Thread(addButtononRunnable);
+            Thread threadAddButton = new Thread(addButtonOnRunnable);
             threadAddButton.start();
 
             clearContent();
         }
     }
 
-    boolean validateEntryBeforeDatabaseAdd(HashMap<String, String> entry) {
-        // As of now first_name & email_id seems to be mandatory as we display it inside
-        // our BasicListEntryActivity class. Rest all can be empty.
+    /** As of now mFirstName & mEmailId seems to be mandatory as we display it inside **/
+    /** our BasicListEntryActivity class. Hence rest all can be empty.                **/
+    private boolean validateEntryBeforeDatabaseAdd(HashMap<String, String> entry) {
+
         boolean returnValue = true;
         final String firstName = entry.get(DataBaseSchema.FIRST_NAME);
         final String emailId  = entry.get(DataBaseSchema.EMAIL_ID);
@@ -104,35 +94,35 @@ public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
         return returnValue;
     }
 
-
+    /** Before new screen display,clear the previous contents so that **/
+    /** user would not have any confusion.                            **/
     private void clearContent() {
-        // Before that clear the contents so that user would not have any confusion.
-        mFirstName.setText(mEmptyString);
-        mLastName.setText(mEmptyString);
-        mEmailId.setText(mEmptyString);
-        mPhoneNumber.setText(mEmptyString);
-        mPhoneNumber.setText(mEmptyString);
+        mFirstName.setText(sEmptyString);
+        mLastName.setText(sEmptyString);
+        mEmailId.setText(sEmptyString);
+        mPhoneNumber.setText(sEmptyString);
+        mHomeAddress.setText(sEmptyString);
     }
 
-    // call the fetch stuff from database and update(set) the various widgets
+    /** Perform the fetch/query operation from database and update/set all widgets **/
     private void setGetButtonOnClick(View v) {
         clearContent();
-        //Setup the another activity, which would list(minimal) of all entries
+        /** Launch the new activity, which would list of all so far stored entries **/
         Intent intent = new Intent(this, BasicListEntryActivity.class);
         startActivity(intent);
     }
 
-    // Delete the current table(hence all entry) and also create the scehma of table.
+    /** Perform the delete operation in current table/database and also create new empty table  **/
     private void setDeleteButtonOnClick(View v) {
-        // Since database operations can be blocking, hence we should execute these in
-        // different thread.
+        /** This is DELETE operation in database and hence it should execute himself **/
+        /** in separate thread.                                                      **/
         Runnable deleteButtonRunnable = new Runnable() {
             @Override
             public void run() {
                 String result;
                 try {
                     SQLiteDatabase database = getDbTools().getWritableDatabase();
-                    int oldVersion = getDbTools().getCurrent_version();
+                    int oldVersion = getDbTools().getsCurrentVersion();
                     getDbTools().onUpgrade(database, oldVersion, oldVersion + 1);
                     result = getString(R.string.correct);
                 }
@@ -181,13 +171,13 @@ public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // As the activity_main.xml has been set as layout of MainActivity
-        // we can fetch the required widgets where we are interested.
-        mFirstName   = (EditText)findViewById(R.id.first_name);
-        mLastName    = (EditText)findViewById(R.id.last_name);
-        mEmailId     = (EditText)findViewById(R.id.email_id);
-        mPhoneNumber = (EditText)findViewById(R.id.phone_number);
-        mHomeAddress = (EditText)findViewById(R.id.home_address);
+        /** As the activity_main.xml has been set as layout of MainActivity  **/
+        /** we can fetch the required widgets View of our interest.          **/
+        mFirstName    = (EditText)findViewById(R.id.first_name);
+        mLastName     = (EditText)findViewById(R.id.last_name);
+        mEmailId      = (EditText)findViewById(R.id.email_id);
+        mPhoneNumber  = (EditText)findViewById(R.id.phone_number);
+        mHomeAddress  = (EditText)findViewById(R.id.home_address);
 
         mAddButton    = (Button)findViewById(R.id.add_button);
         mGetButton    = (Button)findViewById(R.id.get_button);
@@ -196,4 +186,3 @@ public class MainActivity extends BaseCustomWithDataBaseSupportActivity {
         setClickListner();
     }
 }
-

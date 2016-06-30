@@ -19,10 +19,16 @@
 
     <string name="shared_customer_id">com.example.mantoshkumar.customer_id</string>
 
-    <string name="correct">Success</string>
-    <string name="incorrect">Failure</string>
+    <string name="correct">Successfully Completed</string>
+    <string name="incorrect">Failed Operation</string>
 
     <string name="result_add_button">KeyForAddButton</string>
     <string name="result_delete_button">KeyForDeleteButton</string>
+
+    <string name="result_update_button">KeyForUpdateButton</string>
+    <string name="result_fetch_while_startup">KeyForFetchWhileStartup</string>
+
+
+    <string name="result_fetch_all_entry">KeyForFetchAllEntry</string>
 
 </resources>

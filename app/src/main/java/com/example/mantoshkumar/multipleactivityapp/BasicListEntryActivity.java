@@ -1,8 +1,10 @@
 package com.example.mantoshkumar.multipleactivityapp;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -12,108 +14,153 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+/** The BasicListEntryActivity displays the minimal attributes of all rows so that  **/
+/** client can select/touch on particular entry to get the detailed information.    **/
 public class BasicListEntryActivity extends BaseCustomWithDataBaseSupportActivity {
+
     private TableLayout mMainTable;
-    // Need to create & maintain list of rows which would be used later to embbed various widgets
+    /** Create & maintain list of rows which would be used later to embed various widgets. **/
     private ArrayList<TableRow>  mTableRowsList = new ArrayList<TableRow>();
-    // Create two textview entry per row which would be added in mMainTable
+    /** Create two textview entry per row which would be added in mMainTable. **/
     private TextView mContactId;
     private TextView mFirstName;
     private TextView mEmailId;
-    ArrayList<HashMap<String, String>> mGetValues = null;
-    // The below Id would be used to exchange the information to next activity.
+    ArrayList<HashMap<String, String>> mGetValues;
+
+    /** The below Id would be used to exchange the information to next activity. **/
     public static String INTERNAL_CUSTOMER_ID = "@string/shared_customer_id";
 
-    // We need to add the logging to understand the lifecycle of activity. This is required as
-    // resume the activity requires to update the view so that any updated information by user.
+    private Handler mFetchAllEntryThreadHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg){
+            /** Now we have database information fetched, now we can update UI widgets using **/
+            /** this information. UI specific logic should be part of main thread.           **/
+            final int CONTACT_ID_POS = 0;
+            final int FIRST_NAME_POS = 1;
+            final int EMAIL_ID_POS   = 2;
+
+            for(int index = 0; index < mGetValues.size(); ++index)
+            {
+                HashMap<String, String> getOneEntry = mGetValues.get(index);
+
+                TextView tmpContactId = (TextView)mTableRowsList.get(index).getChildAt(CONTACT_ID_POS);
+                tmpContactId.setText(getOneEntry.get(DataBaseSchema.CONTACT_ID));
+
+                TextView tmpFirstName = (TextView)mTableRowsList.get(index).getChildAt(FIRST_NAME_POS);
+                tmpFirstName.setText(getOneEntry.get(DataBaseSchema.FIRST_NAME));
+
+                TextView tmpEmailId = (TextView)mTableRowsList.get(index).getChildAt(EMAIL_ID_POS);
+                tmpEmailId.setText(getOneEntry.get(DataBaseSchema.EMAIL_ID));
+            }
+
+            /** Now we can call the common logic applicable for all thread handler. **/
+            commonHandleMessage(BasicListEntryActivity.this, msg,
+                    getString(R.string.result_fetch_all_entry));
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_list_entry);
 
-        // Get the id of main container widget so that we can perfrom later activity
+        /** Get the id of main container widget so that we can perform later activity. **/
         mMainTable = (TableLayout)findViewById(R.id.container_widget);
-        // Get the width of header widgets so that it can be applied to all created rows
+        /** Get the width of header widgets so that it can be applied to all created rows. **/
         TextView headerId        = (TextView)findViewById(R.id.contact_id);
         TextView headerFirstName = (TextView)findViewById(R.id.first_name);
         TextView headerEmailId   = (TextView)findViewById(R.id.email_id);
 
-        //Find All Contacts From Database and display one by one in list format
-        mGetValues = getDbTools().getAllContactInfo();
+        /** This is FETCH operation for all rows from database and hence it should execute **/
+        /** himself in separate thread.                                                    **/
+        Runnable fetchAllEntryRunnable = new Runnable() {
+            @Override
+            public void run() {
+                String result;
+                try {
+                    mGetValues = getDbTools().getAllContactInfo();
+                    result = getString(R.string.correct);
+                }
+                catch (Exception ec) {
+                    result = getString(R.string.incorrect);
+                }
+                Message msg = mFetchAllEntryThreadHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putString(getString(R.string.result_fetch_all_entry), result);
+                msg.setData(bundle);
+                mFetchAllEntryThreadHandler.sendMessage(msg);
+            }
+        };
+        Thread threadAddButton = new Thread(fetchAllEntryRunnable);
+        threadAddButton.start();
 
-        // Iterate through all entry and create that many row
-        // which entern would add first_name & email_id
+
+
+        /** Iterate through all entry and create that many row        **/
+        /** which entern would add mContactId, mFirstName & mEmailId. **/
         for(int index = 0; index < mGetValues.size(); ++index)
         {
             HashMap<String, String> getOneEntry = mGetValues.get(index);
 
-            // Create one table row per entry
+            /** Create one table row per entry  **/
             TableRow table_row = new TableRow(this);
             mMainTable.addView(table_row);
 
-            // Create contact_id and set its value from db fetched information
+            /** Create mContactId and set its value from db fetched information. **/
             mContactId = new TextView(this);
             mContactId.setLayoutParams(headerId.getLayoutParams());
-            mContactId.setText(getOneEntry.get(DataBaseSchema.CONTACT_ID));
             table_row.addView(mContactId);
 
-            // Create first_name and set its value from db fetched information
+            /** Create mFirstName and set its value from db fetched information. **/
             mFirstName = new TextView(this);
             mFirstName.setLayoutParams(headerFirstName.getLayoutParams());
-            mFirstName.setText(getOneEntry.get(DataBaseSchema.FIRST_NAME));
             table_row.addView(mFirstName);
 
-            // Create email_od and set its value from db fetched information
+            /** Create mEmailId and set its value from db fetched information. **/
             mEmailId   = new TextView(this);
             mEmailId.setLayoutParams(headerEmailId.getLayoutParams());
-            mEmailId.setText(getOneEntry.get(DataBaseSchema.EMAIL_ID));
             table_row.addView(mEmailId);
 
-            // Now add into our container list data structure as it would be
-            // required in later uses.
+            /** Now add into our container list member 'mTableRowsList'. **/
             mTableRowsList.add(table_row);
         }
 
         setClickListner();
-
     }
+
+    /** This is required as resume the activity requires to update its view to reflect the new **/
+    /** updated information set by user. **/
     @Override
     public void onResume() {
         super.onResume();
-        // call onCreate method so that this activity can create/update its view.
         this.onCreate(null);
     }
 
+    /** User may click on any row and application should display the detailed info **/
     private void setClickListner() {
-        // User would click on any row and application should show the details of that entry
         for(int index = 0; index < mTableRowsList.size(); ++index)
         {
             mTableRowsList.get(index).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setAddButtononClick(v);
+                    setRowOnClick(v);
                 }
             });
         }
     }
 
-    private void setAddButtononClick(View v) {
-        try
-        {
-            //Get the number of columns from the given row widgets
-            TableRow clickedRow  = (TableRow)v;
-            View clickedIdView   = clickedRow.getChildAt(0);
-            TextView contactId   = (TextView) clickedIdView;
-            String id = contactId.getText().toString();
+    private void setRowOnClick(View v) {
+        /** Get which row has been touched by user. To achieve this, first extract container  **/
+        /** view(TableRow). In one row,first child is Id view so extract it and now fetch the **/
+        /** id of that particular row. This would be passed to next activity. **/
+        TableRow clickedRow  = (TableRow)v;
+        View clickedIdView   = clickedRow.getChildAt(0);
+        TextView contactId   = (TextView)clickedIdView;
+        String id = contactId.getText().toString();
 
-            //Setup the another activity, which would display detailed view of selected entry
-            Intent intent = new Intent(this, DisplayDetailSingleEntryActivity.class);
-            intent.putExtra(INTERNAL_CUSTOMER_ID, id);
-            startActivity(intent);
-        }
-        catch (Exception ec)
-        {
-            // Do Nothing as of now
-        }
+        /** Launch another activity,which would display detailed view of selected entry. **/
+        Intent intent = new Intent(this, DisplayDetailSingleEntryActivity.class);
+        intent.putExtra(INTERNAL_CUSTOMER_ID, id);
+        startActivity(intent);
     }
 }

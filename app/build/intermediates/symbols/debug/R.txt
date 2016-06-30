@@ -811,10 +811,13 @@ int string last_name 0x7f060023
 int string phone_number 0x7f060024
 int string result_add_button 0x7f060025
 int string result_delete_button 0x7f060026
-int string shared_customer_id 0x7f060027
+int string result_fetch_all_entry 0x7f060027
+int string result_fetch_while_startup 0x7f060028
+int string result_update_button 0x7f060029
+int string shared_customer_id 0x7f06002a
 int string status_bar_notification_info_overflow 0x7f060013
-int string title_activity_detailed_single_entry 0x7f060028
-int string update_button 0x7f060029
+int string title_activity_detailed_single_entry 0x7f06002b
+int string update_button 0x7f06002c
 int style AlertDialog_AppCompat 0x7f090088
 int style AlertDialog_AppCompat_Light 0x7f090089
 int style Animation_AppCompat_Dialog 0x7f09008a

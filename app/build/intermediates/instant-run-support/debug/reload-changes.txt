@@ -1,6 +1,0 @@
-CHANGED,C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\intermediates\transforms\instantRun\debug\folders\4000\5\enhanced\com\example\mantoshkumar\multipleactivityapp\MainActivity$5$override.class
-CHANGED,C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\intermediates\transforms\instantRun\debug\folders\4000\5\enhanced\com\example\mantoshkumar\multipleactivityapp\MainActivity$3$override.class
-CHANGED,C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\intermediates\transforms\instantRun\debug\folders\4000\5\enhanced\com\android\tools\fd\runtime\AppPatchesLoaderImpl.class
-CHANGED,C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\intermediates\transforms\instantRun\debug\folders\4000\5\enhanced\com\example\mantoshkumar\multipleactivityapp\MainActivity$override.class
-CHANGED,C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\intermediates\transforms\instantRun\debug\folders\4000\5\enhanced\com\example\mantoshkumar\multipleactivityapp\MainActivity$6$override.class
-CHANGED,C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\intermediates\transforms\instantRun\debug\folders\4000\5\enhanced\com\example\mantoshkumar\multipleactivityapp\MainActivity$4$override.class

@@ -2518,10 +2518,13 @@ containing a value of this type.
         public static final int phone_number=0x7f060024;
         public static final int result_add_button=0x7f060025;
         public static final int result_delete_button=0x7f060026;
-        public static final int shared_customer_id=0x7f060027;
+        public static final int result_fetch_all_entry=0x7f060027;
+        public static final int result_fetch_while_startup=0x7f060028;
+        public static final int result_update_button=0x7f060029;
+        public static final int shared_customer_id=0x7f06002a;
         public static final int status_bar_notification_info_overflow=0x7f060013;
-        public static final int title_activity_detailed_single_entry=0x7f060028;
-        public static final int update_button=0x7f060029;
+        public static final int title_activity_detailed_single_entry=0x7f06002b;
+        public static final int update_button=0x7f06002c;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f090088;

@@ -1,5 +1,6 @@
 package com.example.mantoshkumar.multipleactivityapp;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -9,120 +10,93 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+/** This is generic helper class which can be used if any activity requires database support. **/
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    public static int current_version = DataBaseSchema.DATABASE_VERSION;
+    private static int sCurrentVersion = DataBaseSchema.DATABASE_VERSION;
 
-    public int getCurrent_version() {
-        return current_version;
-    }
+    /** Returns the current version of database. **/
+    public static int getsCurrentVersion() { return sCurrentVersion; }
 
+    /** Constructor for this class to create an object. **/
     public DataBaseHelper(Context context) {
-        super(context,DataBaseSchema.DATABASE_NAME, null, current_version);
+        super(context, DataBaseSchema.DATABASE_NAME, null, sCurrentVersion);
     }
 
+    /** Create the table as stored in query "sCreateTableQuery". **/
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String query = "CREATE TABLE " +
-                        DataBaseSchema.TABLE_CONTACTS + "(" +
-                        DataBaseSchema.CONTACT_ID   + " INTEGER PRIMARY KEY," +
-                        DataBaseSchema.FIRST_NAME   + " TEXT," +
-                        DataBaseSchema.LAST_NAME    + " TEXT," +
-                        DataBaseSchema.EMAIL_ID     + " TEXT," +
-                        DataBaseSchema.PHONE_NUMBER + " TEXT," +
-                        DataBaseSchema.HOME_ADDRESS + " TEXT" +
-                        ")";
-
-        database.execSQL(query);
+            database.execSQL(DataBaseSchema.sCreateTableQuery);
     }
 
+    /** Delete the table so that all entries would be gone and then create a new empty table. **/
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        String query = "DROP TABLE IF EXISTS "+ DataBaseSchema.TABLE_CONTACTS;
-        database.execSQL(query);
+        database.execSQL(DataBaseSchema.sDeleteTableQuery);
         onCreate(database);
     }
 
-
+    /** Insert a particular row based on input values received from the client. **/
     public void insertContact(HashMap<String, String> queryValues){
 
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
-        values.put(DataBaseSchema.FIRST_NAME,   queryValues.get(DataBaseSchema.FIRST_NAME));
-        values.put(DataBaseSchema.LAST_NAME,    queryValues.get(DataBaseSchema.LAST_NAME));
-        values.put(DataBaseSchema.EMAIL_ID,     queryValues.get(DataBaseSchema.EMAIL_ID));
-        values.put(DataBaseSchema.PHONE_NUMBER, queryValues.get(DataBaseSchema.PHONE_NUMBER));
-        values.put(DataBaseSchema.HOME_ADDRESS, queryValues.get(DataBaseSchema.HOME_ADDRESS));
+        /** Use a particular table specific logic from class DataBaseSchema which is written **/
+        /** specific to this particular application.                                         **/
+        DataBaseSchema.insertRowIntoTableHelper(values,queryValues);
 
         database.insert(DataBaseSchema.TABLE_CONTACTS, null, values);
         database.close();
     }
 
-
+    /** Fetch all rows from database table and return to client. **/
     public ArrayList<HashMap<String, String>> getAllContactInfo(){
 
         ArrayList<HashMap<String, String>> allList = new ArrayList<HashMap<String, String>>();
         SQLiteDatabase database = this.getReadableDatabase();
-        //String selectQuery = "SELECT * FROM contacts WHERE contact_id='" + id + "'";
-        String selectQuery = "SELECT * FROM "+ DataBaseSchema.TABLE_CONTACTS;
-        Cursor cursor = database.rawQuery(selectQuery, null);
 
-        if(cursor.moveToFirst()){
-            do{
-                HashMap<String, String> contactMap = new HashMap<String, String>();
-                contactMap.put(DataBaseSchema.CONTACT_ID,   cursor.getString(0));
-                contactMap.put(DataBaseSchema.FIRST_NAME,   cursor.getString(1));
-                contactMap.put(DataBaseSchema.LAST_NAME,    cursor.getString(2));
-                contactMap.put(DataBaseSchema.EMAIL_ID,     cursor.getString(3));
-                contactMap.put(DataBaseSchema.PHONE_NUMBER, cursor.getString(4));
-                contactMap.put(DataBaseSchema.HOME_ADDRESS, cursor.getString(5));
-                allList.add(contactMap);
-            } while(cursor.moveToNext());
-        }
+        /** Use a particular table specific logic from class DataBaseSchema which is written **/
+        /** specific to this particular application.                                         **/
+        Cursor cursor = database.rawQuery(DataBaseSchema.sSelectAllQuery, null);
+        DataBaseSchema.getAllFromTableHelper(cursor, allList);
+
         database.close();
         return allList;
     }
 
+
     public HashMap<String, String> getContactInfo(String id){
         HashMap<String, String> contactMap = new HashMap<String, String>();
         SQLiteDatabase database = this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM " + DataBaseSchema.TABLE_CONTACTS +
-                             " WHERE " + DataBaseSchema.CONTACT_ID +
-                             "=" + "'" + id + "'";
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        if(cursor.moveToFirst()){
-            do{
 
-                contactMap.put(DataBaseSchema.CONTACT_ID,   cursor.getString(0));
-                contactMap.put(DataBaseSchema.FIRST_NAME,   cursor.getString(1));
-                contactMap.put(DataBaseSchema.LAST_NAME,    cursor.getString(2));
-                contactMap.put(DataBaseSchema.EMAIL_ID,     cursor.getString(3));
-                contactMap.put(DataBaseSchema.PHONE_NUMBER, cursor.getString(4));
-                contactMap.put(DataBaseSchema.HOME_ADDRESS, cursor.getString(5));
-            } while(cursor.moveToNext());
-        }
+        String selectQuery = DataBaseSchema.getQueryBasedOnId(id);
+        Cursor cursor = database.rawQuery(selectQuery, null);
+
+        /** Use a particular table specific logic from class DataBaseSchema which is written **/
+        /** specific to this particular application.                                         **/
+        DataBaseSchema.getContactInfoHelper(cursor, contactMap);
+
         database.close();
         return contactMap;
     }
 
 
+    /** Update a particular row using the new values received from client. **/
     public int updateTableRow(String id, HashMap<String, String> newValue) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(DataBaseSchema.FIRST_NAME,   newValue.get(DataBaseSchema.FIRST_NAME));
-        values.put(DataBaseSchema.LAST_NAME,    newValue.get(DataBaseSchema.LAST_NAME));
-        values.put(DataBaseSchema.EMAIL_ID,     newValue.get(DataBaseSchema.EMAIL_ID));
-        values.put(DataBaseSchema.PHONE_NUMBER, newValue.get(DataBaseSchema.PHONE_NUMBER));
-        values.put(DataBaseSchema.HOME_ADDRESS, newValue.get(DataBaseSchema.HOME_ADDRESS));
-
+        /** Use a particular table specific logic from class DataBaseSchema which is written **/
+        /** specific to this particular application.                                         **/
+        DataBaseSchema.updateTableRowHelper(values,newValue);
+        /** TODO: Move the below logic in DataBaseSchema so that current class would be generic **/
         int affectedRows = database.update(
                            DataBaseSchema.TABLE_CONTACTS,
                            values,
                            DataBaseSchema.CONTACT_ID+"="+id,
                            null
                            );
+
         database.close();
         return affectedRows;
     }
