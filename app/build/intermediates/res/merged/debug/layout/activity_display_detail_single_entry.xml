@@ -85,6 +85,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/update_button" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/update_checkbox"
+            android:layout_column="11"
+            android:layout_weight="1"
+            />
+
     </TableRow>
 
 

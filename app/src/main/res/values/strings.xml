@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">Simple DataBase</string>
 
     <string name="basic_list_of_entry_activity">Basic Information List</string>
@@ -27,7 +28,7 @@
 
     <string name="result_update_button">KeyForUpdateButton</string>
     <string name="result_fetch_while_startup">KeyForFetchWhileStartup</string>
-
+    <string name="message_between_thread">KeyForExchangingBetweenMainAndWorkerThread</string>
 
     <string name="result_fetch_all_entry">KeyForFetchAllEntry</string>
 

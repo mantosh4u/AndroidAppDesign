@@ -1,13 +1,21 @@
 package com.example.mantoshkumar.multipleactivityapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import java.util.HashMap;
+import java.util.List;
 
 
 /** This activity displays detailed view of a particular row and post that it allows user **/
@@ -22,6 +30,8 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
 
     private Button mUpdateButton;
     private String mCurrentSelectedId;
+
+    private CheckBox mEnableUpdate;
 
     private Handler mFetchWhileStartupThreadHandler = new Handler() {
         @Override
@@ -62,13 +72,26 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         mHomeAddress = (EditText)findViewById(R.id.home_address);
 
         mUpdateButton = (Button)findViewById(R.id.update_button);
+        mEnableUpdate = (CheckBox)findViewById(R.id.update_checkbox);
+
         setClickListner();
+        /** By Default, make it checked so that everything would be read only. **/
+        mEnableUpdate.setEnabled(true);
 
         /**  Get the intent and find the ID which is selected by the user. **/
         Intent intent = getIntent();
         mCurrentSelectedId   = intent.getStringExtra(BasicListEntryActivity.INTERNAL_CUSTOMER_ID);
         getCustomerIDAndDisplay(mCurrentSelectedId);
     }
+
+    private View.OnClickListener mCommonClickListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(DisplayDetailSingleEntryActivity.this,
+                           "Button Pressed",
+                           Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private void setClickListner()  {
         mUpdateButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +100,56 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
                 setUpdateButtonOnClick(v);
             }
         });
+
+        mEnableUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CheckBox enableUpdate = (CheckBox)view;
+                /** If user checks on this, which means he can update some stuff. Otherwise **/
+                /** Disable all editable widgets so that later operations can be performed  **/
+                changeEditableAttribute(enableUpdate.isChecked());
+            }
+        });
+
+        /** Assign Basic Click Event Handler for these widgets. **/
+        mFirstName.setOnClickListener(mCommonClickListner);
+        mLastName.setOnClickListener(mCommonClickListner);
+        mHomeAddress.setOnClickListener(mCommonClickListner);
+
+        mPhoneNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText phoneNumber = (EditText)view;
+                /** Fetch the current phone number from this widgets and start a new intent **/
+                /** to make a call. **/
+                String phonePrefix = "tel:";
+                String currentPhoneNumber = phoneNumber.getText().toString();
+                currentPhoneNumber  = phonePrefix.concat(currentPhoneNumber);
+                Uri numberUri = Uri.parse(currentPhoneNumber);
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, numberUri);
+
+                /** Verify it resolves **/
+                PackageManager packageManager = getPackageManager();
+                List<ResolveInfo> activities = packageManager.queryIntentActivities(callIntent, 0);
+                boolean isIntentSafe = activities.size() > 0;
+                /** Start an activity if it's safe **/
+                if (isIntentSafe) {
+                    startActivity(callIntent);
+                }
+
+            }
+        });
+
+    }
+
+
+    private void changeEditableAttribute(boolean isChecked) {
+        mFirstName.setEnabled(isChecked);
+        mLastName.setEnabled(isChecked);
+        mEmailId.setEnabled(isChecked);
+        mPhoneNumber.setEnabled(isChecked);
+        mHomeAddress.setEnabled(isChecked);
+        mUpdateButton.setEnabled(isChecked);
     }
 
 
@@ -158,4 +231,5 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         Thread threadAddButton = new Thread(fetchWhileStartupRunnable);
         threadAddButton.start();
     }
+
 }

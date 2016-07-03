@@ -294,6 +294,7 @@
     <string name="home_address">Address</string>
     <string name="incorrect">Failed Operation</string>
     <string name="last_name">Last Name</string>
+    <string name="message_between_thread">KeyForExchangingBetweenMainAndWorkerThread</string>
     <string name="phone_number">Phone Number</string>
     <string name="result_add_button">KeyForAddButton</string>
     <string name="result_delete_button">KeyForDeleteButton</string>

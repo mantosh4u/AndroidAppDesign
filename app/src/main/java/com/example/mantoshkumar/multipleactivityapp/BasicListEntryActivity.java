@@ -32,19 +32,18 @@ public class BasicListEntryActivity extends BaseCustomWithDataBaseSupportActivit
 
     private Handler mFetchAllEntryThreadHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg){
+        public void handleMessage(Message msg) {
 
             /** Get the id of main container widget so that we can perform later activity. **/
-            mMainTable = (TableLayout)findViewById(R.id.container_widget);
-            /** Get the width of header widgets so that it can be applied to all created rows. **/
-            TextView headerId        = (TextView)findViewById(R.id.contact_id);
-            TextView headerFirstName = (TextView)findViewById(R.id.first_name);
-            TextView headerEmailId   = (TextView)findViewById(R.id.email_id);
+            mMainTable = (TableLayout) findViewById(R.id.container_widget);
+            /** Get the width of header widgets so that it can be applied to created rows. **/
+            TextView headerId = (TextView) findViewById(R.id.contact_id);
+            TextView headerFirstName = (TextView) findViewById(R.id.first_name);
+            TextView headerEmailId = (TextView) findViewById(R.id.email_id);
 
             /** Iterate through all entry and create that many row        **/
             /** which entern would add mContactId, mFirstName & mEmailId. **/
-            for(int index = 0; index < mGetValues.size(); ++index)
-            {
+            for (int index = 0; index < mGetValues.size(); ++index) {
                 HashMap<String, String> getOneEntry = mGetValues.get(index);
 
                 /** Create one table row per entry  **/
@@ -54,38 +53,36 @@ public class BasicListEntryActivity extends BaseCustomWithDataBaseSupportActivit
                 /** Create mContactId and set its value from db fetched information. **/
                 mContactId = new TextView(BasicListEntryActivity.this);
                 mContactId.setLayoutParams(headerId.getLayoutParams());
-                mContactId.setText(getOneEntry.get(DataBaseSchema.CONTACT_ID));
                 table_row.addView(mContactId);
 
                 /** Create mFirstName and set its value from db fetched information. **/
                 mFirstName = new TextView(BasicListEntryActivity.this);
                 mFirstName.setLayoutParams(headerFirstName.getLayoutParams());
-                mFirstName.setText(getOneEntry.get(DataBaseSchema.FIRST_NAME));
                 table_row.addView(mFirstName);
 
                 /** Create mEmailId and set its value from db fetched information. **/
-                mEmailId   = new TextView(BasicListEntryActivity.this);
+                mEmailId = new TextView(BasicListEntryActivity.this);
                 mEmailId.setLayoutParams(headerEmailId.getLayoutParams());
-                mEmailId.setText(getOneEntry.get(DataBaseSchema.EMAIL_ID));
 
                 table_row.addView(mEmailId);
 
                 /** Now add into our container list member 'mTableRowsList'. **/
                 mTableRowsList.add(table_row);
             }
-            /** Now we have all rows created with meaningful value, lets set their listner **/
-            setClickListner();
 
+
+            populateAllLayOutFromDbInformation();
+
+            /** Now we have all rows created with meaningful value, lets set their listener **/
+            setClickListner();
             /** Now we can call the common logic applicable for all thread handler. **/
             commonHandleMessage(BasicListEntryActivity.this, msg,
                     getString(R.string.result_fetch_all_entry));
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_basic_list_entry);
+
+    private void fetchAllEntryFromDataBase() {
 
         /** This is FETCH operation for all rows from database and hence it should execute **/
         /** himself in separate thread.                                                    **/
@@ -109,16 +106,46 @@ public class BasicListEntryActivity extends BaseCustomWithDataBaseSupportActivit
         };
         Thread threadAddButton = new Thread(fetchAllEntryRunnable);
         threadAddButton.start();
-
     }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_basic_list_entry);
+        fetchAllEntryFromDataBase();
+    }
+
+
+    private void populateAllLayOutFromDbInformation() {
+        /** Iterate through all entry and populate information to row attributes. **/
+        for(int index = 0; index < mGetValues.size(); ++index)
+        {
+            HashMap<String, String> getOneEntry = mGetValues.get(index);
+            TableRow currentTableRow  = mTableRowsList.get(index);
+
+            /** Set mContactId value from db fetched information. **/
+            TextView currentContactId = (TextView)currentTableRow.getChildAt(0);
+            currentContactId.setText(getOneEntry.get(DataBaseSchema.CONTACT_ID));
+
+            /** Set mFirstName value from db fetched information. **/
+            TextView currentFirstName = (TextView)currentTableRow.getChildAt(1);
+            currentFirstName.setText(getOneEntry.get(DataBaseSchema.FIRST_NAME));
+
+            /** Set mEmailId value from db fetched information. **/
+            TextView currentEmailId = (TextView)currentTableRow.getChildAt(2);
+            currentEmailId.setText(getOneEntry.get(DataBaseSchema.EMAIL_ID));
+        }
+    }
+
 
     /** This is required as resume the activity requires to update its view to reflect the new **/
     /** updated information set by user. **/
     @Override
     public void onResume() {
         super.onResume();
-        this.onCreate(null);
     }
+
 
     /** User may click on any row and application should display the detailed info **/
     private void setClickListner() {

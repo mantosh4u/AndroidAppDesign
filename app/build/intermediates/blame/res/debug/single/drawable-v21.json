@@ -1,14 +1,14 @@
 [
     {
-        "merged": "C:\\Users\\kumarm4\\AndroidStudioProjects\\MultipleActivityApp\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
-        "source": "C:\\Users\\kumarm4\\AndroidStudioProjects\\MultipleActivityApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+        "merged": "/home/mantosh/AndroidStudioProjects/GitHub/AndroidAppDesign/app/build/intermediates/res/merged/debug/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/home/mantosh/AndroidStudioProjects/GitHub/AndroidAppDesign/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/drawable-v21/abc_btn_colored_material.xml"
     },
     {
-        "merged": "C:\\Users\\kumarm4\\AndroidStudioProjects\\MultipleActivityApp\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_btn_colored_material.xml",
-        "source": "C:\\Users\\kumarm4\\AndroidStudioProjects\\MultipleActivityApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-v21\\abc_btn_colored_material.xml"
+        "merged": "/home/mantosh/AndroidStudioProjects/GitHub/AndroidAppDesign/app/build/intermediates/res/merged/debug/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/home/mantosh/AndroidStudioProjects/GitHub/AndroidAppDesign/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/drawable-v21/abc_action_bar_item_background_material.xml"
     },
     {
-        "merged": "C:\\Users\\kumarm4\\AndroidStudioProjects\\MultipleActivityApp\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_edit_text_material.xml",
-        "source": "C:\\Users\\kumarm4\\AndroidStudioProjects\\MultipleActivityApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.4.0\\res\\drawable-v21\\abc_edit_text_material.xml"
+        "merged": "/home/mantosh/AndroidStudioProjects/GitHub/AndroidAppDesign/app/build/intermediates/res/merged/debug/drawable-v21/abc_edit_text_material.xml",
+        "source": "/home/mantosh/AndroidStudioProjects/GitHub/AndroidAppDesign/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/drawable-v21/abc_edit_text_material.xml"
     }
 ]
