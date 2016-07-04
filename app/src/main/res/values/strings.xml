@@ -1,15 +1,15 @@
 <resources>
 
-    <string name="app_name">Simple DataBase</string>
+    <string name="app_name">Contact List</string>
 
     <string name="basic_list_of_entry_activity">Basic Information List</string>
     <string name="container_widget">Container Widget</string>
 
     <string name="contact_id">Id</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="email_id">Email Id</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="first_name">FirstName</string>
+    <string name="last_name">LastName</string>
+    <string name="email_id">EmailId</string>
+    <string name="phone_number">PhoneNumber</string>
     <string name="home_address">Address</string>
 
     <string name="add_button">ADD</string>

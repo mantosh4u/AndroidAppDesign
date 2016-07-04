@@ -1,6 +1,5 @@
 package com.example.mantoshkumar.multipleactivityapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -75,13 +74,12 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         mEnableUpdate = (CheckBox)findViewById(R.id.update_checkbox);
 
         setClickListner();
-        /** By Default, make it checked so that everything would be read only. **/
-        mEnableUpdate.setEnabled(true);
 
         /**  Get the intent and find the ID which is selected by the user. **/
         Intent intent = getIntent();
         mCurrentSelectedId   = intent.getStringExtra(BasicListEntryActivity.INTERNAL_CUSTOMER_ID);
         getCustomerIDAndDisplay(mCurrentSelectedId);
+
     }
 
     private View.OnClickListener mCommonClickListner = new View.OnClickListener() {
@@ -119,27 +117,60 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         mPhoneNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText phoneNumber = (EditText)view;
-                /** Fetch the current phone number from this widgets and start a new intent **/
-                /** to make a call. **/
-                String phonePrefix = "tel:";
-                String currentPhoneNumber = phoneNumber.getText().toString();
-                currentPhoneNumber  = phonePrefix.concat(currentPhoneNumber);
-                Uri numberUri = Uri.parse(currentPhoneNumber);
-                Intent callIntent = new Intent(Intent.ACTION_DIAL, numberUri);
-
-                /** Verify it resolves **/
-                PackageManager packageManager = getPackageManager();
-                List<ResolveInfo> activities = packageManager.queryIntentActivities(callIntent, 0);
-                boolean isIntentSafe = activities.size() > 0;
-                /** Start an activity if it's safe **/
-                if (isIntentSafe) {
-                    startActivity(callIntent);
-                }
-
+                initiatePhoneCall(view);
             }
         });
 
+        mEmailId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                initiateEmailSending(view);
+            }
+        });
+    }
+
+
+    private  void initiateEmailSending(View view) {
+        /** Fetch the current email id from this widgets and start a new  intent **/
+        /** to send an email. **/
+        EditText  emailId = (EditText)view;
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("text/plain");
+        /** recipients **/
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {emailId.getText().toString()});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Email subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message text");
+
+
+        /** Verify it resolves **/
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(emailIntent, 0);
+        boolean isIntentSafe = activities.size() > 0;
+        /** Start an activity if it's safe **/
+        if (isIntentSafe) {
+            startActivity(emailIntent);
+        }
+    }
+
+
+    private void initiatePhoneCall(View view) {
+        /** Fetch the current phone number from this widgets and start a new intent **/
+        /** to make a call. **/
+        EditText phoneNumber = (EditText)view;
+        String phonePrefix = "tel:";
+        String currentPhoneNumber = phoneNumber.getText().toString();
+        currentPhoneNumber  = phonePrefix.concat(currentPhoneNumber);
+        Uri numberUri = Uri.parse(currentPhoneNumber);
+        Intent callIntent = new Intent(Intent.ACTION_DIAL, numberUri);
+
+        /** Verify it resolves **/
+        PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(callIntent, 0);
+        boolean isIntentSafe = activities.size() > 0;
+        /** Start an activity if it's safe **/
+        if (isIntentSafe) {
+            startActivity(callIntent);
+        }
     }
 
 
@@ -150,6 +181,9 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         mPhoneNumber.setEnabled(isChecked);
         mHomeAddress.setEnabled(isChecked);
         mUpdateButton.setEnabled(isChecked);
+
+        mEmailId.setFocusable(!isChecked);
+        mPhoneNumber.setFocusable(!isChecked);
     }
 
 
@@ -231,5 +265,4 @@ public class DisplayDetailSingleEntryActivity extends BaseCustomWithDataBaseSupp
         Thread threadAddButton = new Thread(fetchWhileStartupRunnable);
         threadAddButton.start();
     }
-
 }

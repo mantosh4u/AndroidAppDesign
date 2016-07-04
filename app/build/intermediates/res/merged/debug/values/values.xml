@@ -279,7 +279,7 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="add_button">ADD</string>
-    <string name="app_name">Simple DataBase</string>
+    <string name="app_name">Contact List</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="basic_list_of_entry_activity">Basic Information List</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
@@ -288,14 +288,14 @@
     <string name="container_widget">Container Widget</string>
     <string name="correct">Successfully Completed</string>
     <string name="delete_button">DELETE</string>
-    <string name="email_id">Email Id</string>
-    <string name="first_name">First Name</string>
+    <string name="email_id">EmailId</string>
+    <string name="first_name">FirstName</string>
     <string name="get_button">GET</string>
     <string name="home_address">Address</string>
     <string name="incorrect">Failed Operation</string>
-    <string name="last_name">Last Name</string>
+    <string name="last_name">LastName</string>
     <string name="message_between_thread">KeyForExchangingBetweenMainAndWorkerThread</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="phone_number">PhoneNumber</string>
     <string name="result_add_button">KeyForAddButton</string>
     <string name="result_delete_button">KeyForDeleteButton</string>
     <string name="result_fetch_all_entry">KeyForFetchAllEntry</string>

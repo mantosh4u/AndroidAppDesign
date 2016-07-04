@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <instant-run
-    abi="armeabi-v7a,armeabi"
-    api-level="19"
-    density="mdpi"
+    abi="x86"
+    api-level="22"
+    density="xxhdpi"
     format="7"
-    timestamp="1004429393066"
-    token="-2525091991683940953" >
+    timestamp="20205048391922"
+    token="283010926110241162" >
 
     <task
         name="javac"
@@ -20,6 +20,14 @@
         name="verifier"
         duration="0" />
 
-    <build timestamp="1004429393066" />
+    <artifact
+        location="C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\outputs\apk\app-debug.apk"
+        type="MAIN" />
+
+    <build timestamp="20205048391922" >
+        <artifact
+            location="C:\Users\kumarm4\AndroidStudioProjects\MultipleActivityApp\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
 
 </instant-run>
